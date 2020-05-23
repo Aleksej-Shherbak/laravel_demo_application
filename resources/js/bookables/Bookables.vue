@@ -7,11 +7,7 @@
         <div class="row mb-4" v-for="row in rows" :key="'row'+row">
             <div class="col d-flex align-items-stretch" v-for="(bookable, column) in bookableInRow(row)"
                  :key="'row' + row + column">
-                <bookable-list-item
-                    :title="bookable.title"
-                    :description="bookable.description"
-                    :price="bookable.price">
-                </bookable-list-item>
+                <bookable-list-item v-bind="bookable"/>
             </div>
             <div class="col" v-for="p in placeholdersInRow(row)" :key="'placeholder' + row + p"></div>
         </div>
