@@ -33,6 +33,8 @@ services:
       POSTGRES_USER: "sportshop"
       POSTGRES_PASSWORD: "sportshop"
       POSTGRES_DB: "sportshop"
+    networks:
+      - internal
 
 networks:
   internal:
