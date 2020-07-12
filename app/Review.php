@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Review
  * @package App
  * @property string $id
- * @property \DateTime $created_at
- * @property \DateTime $updated_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  * @property string $content
  * @property integer $rating
  * @property integer $bookable_id

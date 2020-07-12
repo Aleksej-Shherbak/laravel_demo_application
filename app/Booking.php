@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Model;
  * Class Booking
  * @package App
  * @property integer $id
- * @property \DateTime $from
- * @property \DateTime $to
- * @property \DateTime $created_at
- * @property \DateTime $updated_at
+ * @property \Illuminate\Support\Carbon $from
+ * @property \Illuminate\Support\Carbon $to
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  * @property integer $bookable_id
  */
 class Booking extends Model

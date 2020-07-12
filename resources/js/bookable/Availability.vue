@@ -52,6 +52,9 @@
                 errors: null,
             }
         },
+        props: {
+            bookableId: String
+        },
         computed: {
             hasErrors: function () {
                 return this.errors !== null && this.errors !== null;
@@ -68,7 +71,7 @@
                 this.loading = true;
                 this.errors = null;
 
-                axios.get(`/api/bookables/${this.$route.params.id}/availability?from=${this.from}&to=${this.to}`)
+                axios.get(`/api/bookables/${this.bookableId}/availability?from=${this.from}&to=${this.to}`)
                 .then(resp => {
                     this.status = resp.status;
                 })

@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property integer $id
  * @property string $title
  * @property string $description
- * @property \DateTime $created_at
- * @property \DateTime $updated_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  *
  */
 class Bookable extends Model
