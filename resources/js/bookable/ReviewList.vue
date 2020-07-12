@@ -7,7 +7,10 @@
             <div class="border-bottom" v-for="(review, i) in reviews" :key="i">
                 <div class="row pt-4">
                     <div class="col-md-6">Aleksej Shherbak</div>
-                    <div class="col-md-6 d-md-flex justify-content-end">{{ review.rating }}</div>
+                    <div class="col-md-6 d-md-flex justify-content-end">
+                        <star-rating></star-rating>
+                        {{ review.rating }}
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">{{ review.created_at | fromNow }}</div>
@@ -23,8 +26,10 @@
 </template>
 
 <script>
+    import StarRating from "../shared/components/StarRating";
     export default {
         name: "ReviewList",
+        components: {StarRating},
         data() {
             return {
                 loading: false,
