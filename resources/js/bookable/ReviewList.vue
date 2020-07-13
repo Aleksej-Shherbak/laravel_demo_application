@@ -6,10 +6,9 @@
         <div v-else>
             <div class="border-bottom" v-for="(review, i) in reviews" :key="i">
                 <div class="row pt-4">
-                    <div class="col-md-6">Aleksej Shherbak</div>
+                    <div class="col-md-6">Aleksej Shherbak (mock)</div>
                     <div class="col-md-6 d-md-flex justify-content-end">
-                        <star-rating></star-rating>
-                        {{ review.rating }}
+                        <star-rating :value="review.rating" class="fa-lg"></star-rating>
                     </div>
                 </div>
                 <div class="row">
