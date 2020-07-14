@@ -13,6 +13,6 @@ $factory->define(Booking::class, function (Faker $faker) {
 
     return [
         'from' => $from,
-        'to' => $to
+        'to' => $to,
     ];
 });
