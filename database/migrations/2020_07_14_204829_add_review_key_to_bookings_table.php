@@ -14,7 +14,7 @@ class AddReviewKeyToBookingsTable extends Migration
     public function up()
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->uuid('review_key');
+            $table->uuid('review_key')->nullable();
         });
     }
 

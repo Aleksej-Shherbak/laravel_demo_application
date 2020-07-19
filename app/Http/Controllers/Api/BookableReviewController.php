@@ -6,6 +6,7 @@ use App\Bookable;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookableReviewIndexResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookableReviewController extends Controller
 {

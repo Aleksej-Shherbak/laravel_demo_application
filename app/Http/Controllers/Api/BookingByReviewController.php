@@ -6,6 +6,7 @@ use App\Booking;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingByReviewShowResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookingByReviewController extends Controller
 {
@@ -18,6 +19,12 @@ class BookingByReviewController extends Controller
      */
     public function __invoke(string $reviewKey, Request $request)
     {
-        return new BookingByReviewShowResource(Booking::findByReviewKey($reviewKey)) ?? abort(404);
+        if (!Str::isUuid($reviewKey)) {
+            abort(404);
+        }
+
+        $res = Booking::findByReviewKey($reviewKey);
+
+        return $res !== null ? new BookingByReviewShowResource($res) : abort(404);
     }
 }
