@@ -8,6 +8,7 @@ use App\Http\Resources\ReviewResource;
 use App\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ReviewController extends Controller
 {
@@ -16,7 +17,7 @@ class ReviewController extends Controller
         $data = $request->validate([
             'id' => 'required|uuid|unique:reviews',
             'content' => 'required|min:2',
-            'rating' => 'required|in:[1,2,3,4,5]',
+            'rating' => 'required|in:0,1,2,3,4,5',
         ]);
 
         $booking = Booking::findByReviewKey($data['id']);

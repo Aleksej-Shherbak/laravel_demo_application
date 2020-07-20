@@ -11,10 +11,10 @@
                     <div class="card-text" v-else>Loading ...</div>
                 </div>
             </div>
-            <review-list :bookable-id="this.$route.params.id"></review-list>
+            <review-list :bookable-id="bookableId"></review-list>
         </div>
         <div class="col-md-4 pb-4">
-            <availability :bookable-id="this.$route.params.id"></availability>
+            <availability :bookable-id="bookableId"></availability>
         </div>
     </div>
 </template>
@@ -43,6 +43,11 @@
                 loading: false,
                 bookable: null,
             };
+        },
+        computed: {
+            bookableId() {
+                return parseInt(this.$route.params.id);
+            }
         }
     }
 </script>

@@ -36,7 +36,7 @@
             }
         },
         props: {
-            bookableId: String
+            bookableId: Number
         },
         created() {
             this.loading = true;

@@ -14,10 +14,7 @@
                         @keyup.enter="check"
                         :class="[{'is-invalid': this.errorFor('from')}]"
                 >
-                <div class="invalid-feedback"
-                     v-for="(error, index) in this.errorFor('from')" :key="index">
-                    {{ error }}
-                </div>
+                <v-errors :errors="errorFor('from')"></v-errors>
             </div>
 
             <div class="form-group col-md-6">
@@ -28,10 +25,7 @@
                        @keyup.enter="check"
                        :class="[{'is-invalid': this.errorFor('to')}]"
                 >
-                <div class="invalid-feedback"
-                     v-for="(error, index) in this.errorFor('to')" :key="index">
-                    {{ error }}
-                </div>
+                <v-errors :errors="errorFor('to')"></v-errors>
             </div>
 
             <button class="btn btn-secondary btn-block" @click.prevent="check" :disabled="loading">Check!</button>
@@ -41,6 +35,8 @@
 </template>
 
 <script>
+    import {is422} from "../shared/utils/response";
+
     export default {
         name: "Availability",
         data() {
@@ -53,7 +49,7 @@
             }
         },
         props: {
-            bookableId: String
+            bookableId: Number
         },
         computed: {
             hasErrors: function () {
@@ -76,7 +72,7 @@
                     this.status = resp.status;
                 })
                     .catch(err => {
-                        if (422 === err.response.status) {
+                        if (is422(err)) {
                             this.errors = err.response.data.errors;
                         }
 
