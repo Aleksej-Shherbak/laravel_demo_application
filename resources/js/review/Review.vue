@@ -1,6 +1,10 @@
 <template>
     <div>
-        <fatal-error v-if="error"></fatal-error>
+        <success v-if="success">
+            You've left a review! Thank you! <br>
+            <router-link :to="{name: 'home'}">Go to main page</router-link>
+        </success>
+        <fatal-error v-else-if="error"></fatal-error>
         <div class="row" v-else>
             <div :class="[{'col-md-4': twoColumns}, {'d-none': oneColumn}]">
                 <div class="card">
@@ -22,8 +26,14 @@
             <div :class="[{'col-md-8': twoColumns }, {'col-md-12': oneColumn}]">
                 <div v-if="loading">Loading</div>
                 <div v-else>
-                    <div v-if="existingReview">
+                    <div v-if="existingReview" class="text-center h2 text-muted">
+                        <i class="fa fa-star"></i>
                         You've already left a review for this booking!
+                        <i class="fa fa-star"></i>
+                        <br>
+                        Thank you!
+                        <br>
+                        <router-link :to="{name: 'home'}">Go to main page</router-link>
                     </div>
                     <div v-else>
                         <div class="form-group">
@@ -54,17 +64,22 @@
     import {is404, is422} from "../shared/utils/response";
     import FatalError from "../shared/components/FatalError";
     import validationErrors from "../shared/mixins/validationErrors";
+    import Success from "../shared/components/Success";
 
     export default {
         name: "Review",
         mixins: [validationErrors],
-        components: {FatalError, StarRating},
+        components: {Success, FatalError, StarRating},
         methods: {
             submit() {
                 this.errors = null;
                 this.sanding = true;
+                this.success = false;
+
                 axios.post(`/api/reviews`, this.review)
-                    .then(res => (console.log(res)))
+                    .then(res => {
+                        this.success = res.status === 201;
+                    })
                     .catch(err => {
                         if (is422(err)) {
                             const errors = err.response.data.errors;
@@ -79,33 +94,27 @@
                     .then((res) => (this.sanding = false));
             },
         },
-        created() {
+        async created() {
             this.review.id = this.$route.params.id;
             this.loading = true;
             // Check if review already exists
-            axios.get(`/api/reviews/${this.review.id}`)
-                .then(res => {
-                    this.existingReview = res.data
-                })
-                .catch(err => {
-                    // Fetch a booking by a review key
-                    if (is404(err)) {
-                        return axios.get(`/api/booking-by-review/${this.review.id}`)
-                            .then(response => {
-                                this.booking = response.data.data
-                            })
-                            .catch((err) => {
-                                if (!is404(err)) {
-                                    this.error = true;
-                                }
-                            })
+            try {
+                this.existingReview = (await axios.get(`/api/reviews/${this.review.id}`)).data;
+            } catch (err) {
+                if (is404(err)) {
+                    try {
+                        this.booking = (await axios.get(`/api/booking-by-review/${this.review.id}`)).data.data;
+                    } catch (error) {
+                        if (!is404(error)) {
+                            this.error = true;
+                        }
                     }
-
+                } else {
                     this.error = true;
-                }).then(() => {
-                this.loading = false;
-            })
+                }
+            }
 
+            this.loading = false;
         },
         data() {
             return {
@@ -119,6 +128,7 @@
                 sanding: false,
                 booking: null,
                 error: false,
+                success: false,
             }
         },
         computed: {

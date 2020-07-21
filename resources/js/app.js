@@ -9,7 +9,7 @@ import Index from "./components/Index";
 import StarRating from "./shared/components/StarRating";
 import FatalError from "./shared/components/FatalError";
 import ValidationErrors from "./shared/components/ValidationErrors";
-
+import Success from "./shared/components/Success";
 
 window.Vue = require('vue');
 
@@ -19,6 +19,7 @@ Vue.component('example-2', require('./components/Example2.vue').default);*/
 Vue.use(VueRouter);
 
 Vue.component(StarRating);
+Vue.component(Success);
 Vue.component(FatalError);
 Vue.component('v-errors', ValidationErrors);
 
