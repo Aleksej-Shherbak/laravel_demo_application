@@ -36,16 +36,17 @@
 
 <script>
     import {is422} from "../shared/utils/response";
+    import validationErrors from "../shared/mixins/validationErrors";
 
     export default {
         name: "Availability",
+        mixins: [validationErrors],
         data() {
             return {
                 from: null,
                 to: null,
                 loading: false,
                 status: null,
-                errors: null,
             }
         },
         props: {
@@ -80,9 +81,6 @@
                     })
                 .finally(() => this.loading = false);
             },
-            errorFor(field) {
-                return this.hasErrors && this.errors[field] ? this.errors[field] : null;
-            }
         }
 
     }

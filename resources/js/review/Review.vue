@@ -53,9 +53,11 @@
     import StarRating from "../shared/components/StarRating";
     import {is404, is422} from "../shared/utils/response";
     import FatalError from "../shared/components/FatalError";
+    import validationErrors from "../shared/mixins/validationErrors";
 
     export default {
         name: "Review",
+        mixins: [validationErrors],
         components: {FatalError, StarRating},
         methods: {
             submit() {
@@ -75,9 +77,6 @@
                         this.error = true;
                     })
                     .then((res) => (this.sanding = false));
-            },
-            errorFor(field) {
-                return this.errors !== null && this.errors[field] ? this.errors[field] : null;
             },
         },
         created() {
@@ -120,7 +119,6 @@
                 sanding: false,
                 booking: null,
                 error: false,
-                errors: null,
             }
         },
         computed: {
