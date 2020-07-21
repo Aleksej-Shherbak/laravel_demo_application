@@ -8,7 +8,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="from">From</label>
-                <input type="text" id="from" name="from"
+                <input type="date" id="from" name="from"
                        class="form-control form-control-sm"
                        placeholder="Start date" v-model="from"
                         @keyup.enter="check"
@@ -19,7 +19,7 @@
 
             <div class="form-group col-md-6">
                 <label for="to">To</label>
-                <input type="text" id="to" name="to"
+                <input type="date" id="to" name="to"
                        class="form-control form-control-sm"
                        placeholder="End date" v-model="to"
                        @keyup.enter="check"
@@ -43,8 +43,8 @@
         mixins: [validationErrors],
         data() {
             return {
-                from: null,
-                to: null,
+                from: this.$store.state.lastSearch.from,
+                to: this.$store.state.lastSearch.to,
                 loading: false,
                 status: null,
             }
@@ -67,6 +67,11 @@
             check() {
                 this.loading = true;
                 this.errors = null;
+
+                this.$store.commit('setLastSearch', {
+                    from: this.from,
+                    to: this.to,
+                });
 
                 axios.get(`/api/bookables/${this.bookableId}/availability?from=${this.from}&to=${this.to}`)
                 .then(resp => {

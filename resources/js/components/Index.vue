@@ -2,7 +2,6 @@
     <div>
         <nav class="navbar bg-white border-bottom navbar-light">
             <router-link class="navbar-brand mr-auto" :to="{name: 'home'}">Home</router-link>
-            <router-link class="btn nav-button" :to="{name: 'second'}">second</router-link>
         </nav>
 
         <div class="container my-4 px-4">
@@ -12,8 +11,23 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
+
     export default {
-        name: "Index"
+        name: "Index",
+        data() {
+            return {
+                lastSearch: this.$store.state.lastSearch
+            }
+        },
+
+        // Test mapState!
+        computed: {
+            ...mapState({
+                lastSearchComputed: 'lastSearch'
+            }),
+
+        }
     }
 </script>
 
