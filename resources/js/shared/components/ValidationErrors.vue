@@ -8,15 +8,14 @@
 </template>
 
 <script>
-    import { v4 as uuidv4 } from 'uuid';
+    import uniqueKey from "../mixins/uniqueKey";
 
     export default {
         name: "ValidationErrors",
         props: ['errors'],
+        mixins: [uniqueKey],
         methods: {
-            key(index) {
-                return uuidv4('error', index);
-            }
+
         }
     }
 </script>

@@ -1,8 +1,11 @@
 <template>
     <div>
         <h6 class="text-uppercase text-secondary font-weight-bold">Check Availability
-            <span v-if="noAvailability" class="text-danger text-uppercase">(Not available)</span>
-            <span v-if="hasAvailability" class="text-success text-uppercase">(Available)</span>
+            <transition name="fade">
+                <span v-if="noAvailability" class="text-danger text-uppercase">(Not available)</span>
+                <span v-if="hasAvailability" class="text-success text-uppercase">(Available)</span>
+            </transition>
+
         </h6>
 
         <div class="form-row">
@@ -11,8 +14,8 @@
                 <input type="date" id="from" name="from"
                        class="form-control form-control-sm"
                        placeholder="Start date" v-model="from"
-                        @keyup.enter="check"
-                        :class="[{'is-invalid': this.errorFor('from')}]"
+                       @keyup.enter="check"
+                       :class="[{'is-invalid': this.errorFor('from')}]"
                 >
                 <v-errors :errors="errorFor('from')"></v-errors>
             </div>
@@ -28,7 +31,12 @@
                 <v-errors :errors="errorFor('to')"></v-errors>
             </div>
 
-            <button class="btn btn-secondary btn-block" @click.prevent="check" :disabled="loading">Check!</button>
+            <button class="btn btn-secondary btn-block" @click.prevent="check" :disabled="loading">
+                <span v-if="!loading">Check!</span>
+                <span v-else>
+                    <i class="fa fa-circle-notch fa-spin"></i> Checking ...
+                </span>
+            </button>
         </div>
 
     </div>
@@ -56,35 +64,40 @@
             hasErrors: function () {
                 return this.errors !== null && this.errors !== null;
             },
-            hasAvailability: function() {
+            hasAvailability: function () {
                 return this.status === 200;
             },
-            noAvailability: function() {
+            noAvailability: function () {
                 return this.status === 404;
             },
         },
         methods: {
-            check() {
+            async check() {
                 this.loading = true;
                 this.errors = null;
 
-                this.$store.dispatch('setLastSearch', {
+                await this.$store.dispatch('setLastSearch', {
                     from: this.from,
                     to: this.to,
                 });
 
-                axios.get(`/api/bookables/${this.bookableId}/availability?from=${this.from}&to=${this.to}`)
-                .then(resp => {
-                    this.status = resp.status;
-                })
-                    .catch(err => {
-                        if (is422(err)) {
-                            this.errors = err.response.data.errors;
-                        }
+                try {
+                    this.status = (
+                        await axios.get(
+                            `/api/bookables/${this.bookableId}/availability?from=${this.from}&to=${this.to}`)
+                    ).status;
 
-                        this.status = err.response.status;
-                    })
-                .finally(() => this.loading = false);
+                    this.$emit('availability', this.hasAvailability)
+
+                } catch (err) {
+                    if (is422(err)) {
+                        this.errors = err.response.data.errors;
+                    }
+                    this.status = err.response.status;
+                    this.$emit('availability', this.hasAvailability)
+                }
+
+                this.loading = false;
             },
         }
 
@@ -99,7 +112,7 @@
         font-weight: bolder;
     }
 
-    .is-invalid{
+    .is-invalid {
         border-color: #b22222;
         background-image: none;
     }

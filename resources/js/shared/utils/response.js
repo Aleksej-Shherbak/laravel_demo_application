@@ -9,3 +9,4 @@ export const is422 = function (err) {
 const isErrorWithResponseAndStatus = function (err) {
     return err.response && err.response.status;
 };
+

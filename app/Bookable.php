@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Bookable
  * @package App
  * @property integer $id
+ * @property integer $price
  * @property string $title
  * @property string $description
  * @property \Illuminate\Support\Carbon $created_at
