@@ -1,6 +1,6 @@
 version: '3'
 services:
-
+# About dev settings https://blog.denisbondar.com/post/phpstorm_docker_xdebug
   php-fpm:
     build:
       context: docker/php-fpm
