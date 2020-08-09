@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Address;
 use App\Bookable;
+use App\Booking;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,7 @@ class CheckoutController extends Controller
      * Checkout endpoint action.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
     public function __invoke(Request $request)
     {
@@ -45,6 +47,25 @@ class CheckoutController extends Controller
                 }
             ],
         ]));
+
+        $bookingsDate = $data['bookings'];
+        $addressDate = $data['customer'];
+
+        $bookings = collect($bookingsDate)->map(function ($bookingsDate) use ($addressDate) {
+            $booking = new Booking();
+            $booking->from = $bookingsDate['from'];
+            $booking->to = $bookingsDate['to'];
+            $booking->price = 200;
+            $booking->bookable_id = $bookingsDate['bookable_id'];
+
+            $booking->address()->associate(Address::create($addressDate));
+
+            $booking->save();
+
+            return $booking;
+        });
+
+        return $bookings;
 
     }
 }

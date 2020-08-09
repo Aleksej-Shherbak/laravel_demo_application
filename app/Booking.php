@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property integer $bookable_id
+ * @property integer $price
  * @property string $review_key // uuid for a new possible review for this Booking
  */
 class Booking extends Model
@@ -31,6 +32,11 @@ class Booking extends Model
     public function review() : HasOne
     {
         return $this->hasOne(Review::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
     }
 
     public function scopeBetweenDates(Builder $query, $from, $to)
