@@ -4,48 +4,48 @@
             <div class="form-row">
                 <div class="col-md-6 form-group">
                     <label for="first-name">First name</label>
-                    <input type="text" id="first-name" class="form-control">
+                    <input type="text" id="first-name" v-model="customer.first_name" class="form-control">
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="last-name">Last name</label>
-                    <input type="text" id="last-name" class="form-control">
+                    <input type="text" id="last-name" v-model="customer.last_name" class="form-control">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-md-12 form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" class="form-control">
+                    <input type="email" id="email" v-model="customer.email" class="form-control">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-md-6 form-group">
                     <label for="street">Street</label>
-                    <input type="text" id="street" class="form-control">
+                    <input type="text" id="street" v-model="customer.street" class="form-control">
                 </div>
 
                 <div class="col-md-6 form-group">
                     <label for="city">City</label>
-                    <input type="text" id="city" class="form-control">
+                    <input type="text" id="city" v-model="customer.city" class="form-control">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-md-6 form-group">
                     <label for="country">Country</label>
-                    <input type="text" id="country" class="form-control">
+                    <input type="text" id="country" v-model="customer.country" class="form-control">
                 </div>
                 <div class="col-md-4 form-group">
                     <label for="state">State</label>
-                    <input type="text" id="state" class="form-control">
+                    <input type="text" id="state" v-model="customer.state" class="form-control">
                 </div>
                 <div class="col-md-2 form-group">
                     <label for="zip-code">Zip code</label>
-                    <input type="text" id="zip-code" class="form-control">
+                    <input type="text" id="zip-code" v-model="customer.zip" class="form-control">
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <button type="submit" class="btn btn-block btn-lg btn-primary">
+                    <button type="submit" class="btn btn-block btn-lg btn-primary" @click.prevent="book">
                         Book now!
                     </button>
                 </div>
@@ -95,14 +95,49 @@
 
 <script>
     import {mapGetters, mapState} from 'vuex';
+    import validationErrors from "../shared/mixins/validationErrors";
 
     export default {
         name: "Basket",
+        mixins: ['validationErrors'],
         computed: {
             ...mapGetters(['itemsInBasket']),
             ...mapState({
                 basket: state => state.basket.items
             })
+        },
+        data() {
+            return {
+                loading: false,
+                customer: {
+                    first_name: null,
+                    last_name: null,
+                    email: null,
+                    street: null,
+                    city: null,
+                    state: null,
+                    zip: null,
+                    country: null,
+                }
+            }
+        },
+        methods: {
+            async book() {
+                try {
+                    await axios.post('/api/checkout', {
+                        customer: this.customer,
+                        bookings: this.basket.map(x => ({
+                            bookable_id: x.bookable.id,
+                            from: x.dates.from,
+                            to: x.dates.to,
+                        })),
+                    })
+                } catch (e) {
+
+                }
+
+                this.loading = false;
+            }
         }
     }
 </script>
