@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8" v-if="itemsInBasket">
             <div class="form-row">
                 <div class="col-md-6 form-group">
                     <label for="first-name">First name</label>
@@ -51,6 +51,13 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-8" v-else>
+            <div class="jumbotron jumbotron-fluid text-center">
+                <h1>Basket is empty</h1>
+            </div>
+        </div>
+
         <div class="col-md-4">
             <div class="d-flex justify-content-between">
                 <h6 class="text-uppercase text-secondary font-weight-bold">Your Cart</h6>
@@ -94,7 +101,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapState} from 'vuex';
+    import {mapActions, mapGetters, mapState} from 'vuex';
     import validationErrors from "../shared/mixins/validationErrors";
 
     export default {
@@ -104,7 +111,7 @@
             ...mapGetters(['itemsInBasket']),
             ...mapState({
                 basket: state => state.basket.items
-            })
+            }),
         },
         data() {
             return {
@@ -122,6 +129,7 @@
             }
         },
         methods: {
+            ...mapActions(['clearBasket']),
             async book() {
                 try {
                     await axios.post('/api/checkout', {
@@ -133,9 +141,9 @@
                         })),
                     })
                 } catch (e) {
-
+                    console.error(e)
                 }
-
+                this.clearBasket();
                 this.loading = false;
             }
         }
