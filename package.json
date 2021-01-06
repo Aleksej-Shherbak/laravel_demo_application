@@ -16,7 +16,7 @@
   "devDependencies": {
     "@babel/compat-data": "^7.10.4",
     "@fortawesome/fontawesome-free": "^5.13.1",
-    "axios": "^0.19",
+    "axios": "^0.21",
     "babel": "^6.23.0",
     "bootstrap": "^4.5.0",
     "cross-env": "^7.0",
